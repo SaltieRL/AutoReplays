@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Management;
+using System.Net;
 
 namespace SaltieAutoReplays
 {
     class Program
     {
-        static void Main()
+        static string UPLOAD_URL = "https://localhost:5000";
+
+        private static void Main()
         {
             // TODO: Read the replays path from a config file instead. Could be set during installation.
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -32,13 +35,14 @@ namespace SaltieAutoReplays
         }
 
         // Method should contain whatever should happen on replay file creation. E.g. Upload file to server.
-        static void OnFileCreate(object source, FileSystemEventArgs e)
+        private static void OnFileCreate(object source, FileSystemEventArgs e)
         {
             Console.WriteLine("Created: {0}", e.FullPath);
+            UploadFile(e.FullPath);
         }
 
         // Method should contain whatever should happen when Rocket League is started.
-        static void OnProcessCreate(object source, EventArrivedEventArgs e)
+        private static void OnProcessCreate(object source, EventArrivedEventArgs e)
         {
             foreach (var item in ((ManagementBaseObject)e.NewEvent["TargetInstance"]).Properties)
             {
@@ -48,6 +52,12 @@ namespace SaltieAutoReplays
                     // TODO: Do whatever is needed with a game monitor.
                 }
             }
+        }
+
+        private static void UploadFile(string filename)
+        {
+            var wc = new WebClient();
+            wc.UploadFileAsync(new Uri(UPLOAD_URL), filename);
         }
     }
 }
