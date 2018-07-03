@@ -45,12 +45,12 @@ namespace RLBot_Injector
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            string[] dllPaths = Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "RLBot*Core.dll");
+            string[] dllPaths = Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ReplaySaver.dll");
 
             if (dllPaths.Length == 0)
             {
-                showMessage("The RLBot Dll could not be found in the startup directory of this injector!",
-                            "RLBot Dll not found",
+                showMessage("ReplaySaver.dll could not be found in the startup directory of this injector!",
+                            "ReplaySaver.dll not found",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Exclamation);
 
@@ -58,9 +58,9 @@ namespace RLBot_Injector
             }
             else if (dllPaths.Length > 1)
             {
-                showMessage("Multiple RLBot Dll files have been found in the startup directory of this injector!\n" +
-                            "Please make sure that only one RLBot Dll file exists in that directory.",
-                            "Multiple RLBot Dll files found",
+                showMessage("Multiple ReplaySaver.dll files have been found in the startup directory of this injector!\n" +
+                            "Please make sure that only one ReplaySaver.dll file exists in that directory.",
+                            "Multiple ReplaySaver.dll files found",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Exclamation);
 
@@ -85,11 +85,11 @@ namespace RLBot_Injector
 
                 foreach (ProcessModule module in rlProcess.Modules)
                 {
-                    if (Regex.IsMatch(module.ModuleName, "RLBot.*Core.dll"))
+                    if (Regex.IsMatch(module.ModuleName, @"ReplaySaver\.dll"))
                     {
-                        showMessage("The RLBot Dll has already been injected into Rocket League!\n" +
+                        showMessage("ReplaySaver.dll has already been injected into Rocket League!\n" +
                             "Injecting it more than once is not possible.",
-                            "RLBot Dll already injected",
+                            "ReplaySaver.dll already injected",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Exclamation);
 

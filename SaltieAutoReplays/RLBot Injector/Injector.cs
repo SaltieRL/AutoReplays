@@ -81,7 +81,7 @@ namespace RLBot_Injector
         {
             if (File.Exists(dllLocation) == false)
             {
-                error = "The RLBot Dll file could not be found";
+                error = "ReplaySaver.dll file could not be found";
                 return false;
             }
 
