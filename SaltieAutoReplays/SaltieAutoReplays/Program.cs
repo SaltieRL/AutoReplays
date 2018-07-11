@@ -13,7 +13,7 @@ namespace SaltieAutoReplays
         {
             // TODO: Read the replays path from a config file instead. Could be set during installation.
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string replaysPath = Path.Combine(documentsPath, @"My Games\Rocket League\TAGame");
+            string replaysPath = Path.Combine(documentsPath, @"My Games\Rocket League\TAGame\Demos");
 
             // Create replay folder monitor.
             FileSystemWatcher watcher = new FileSystemWatcher();
