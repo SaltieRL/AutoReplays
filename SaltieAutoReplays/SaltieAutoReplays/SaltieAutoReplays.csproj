@@ -59,5 +59,11 @@
     <Content Include="icon.ico" />
     <Content Include="saltierlfinal5_jrz_icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RLBot Injector\RLBot Injector.csproj">
+      <Project>{2d2f370a-e0e0-4374-90cd-0c23d68e6773}</Project>
+      <Name>RLBot Injector</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

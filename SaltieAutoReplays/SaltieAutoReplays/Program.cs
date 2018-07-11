@@ -2,6 +2,8 @@
 using System.IO;
 using System.Management;
 using System.Net;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace SaltieAutoReplays
 {
@@ -46,10 +48,19 @@ namespace SaltieAutoReplays
         {
             foreach (var item in ((ManagementBaseObject)e.NewEvent["TargetInstance"]).Properties)
             {
-                if (item.Name == "Caption" && item.Value.ToString() == "rocketleague.exe")
+                if (item.Name == "Caption" && item.Value.ToString().ToLower() == "rocketleague.exe")
                 {
                     Console.WriteLine("rocketleague.exe was started");
-                    // TODO: Do whatever is needed with a game monitor.
+
+                    try
+                    {
+                        Process.Start("RLBot Injector.exe");
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        throw new FileNotFoundException("Injector was not found in the same folder as this exe! (" +
+                            Assembly.GetEntryAssembly().Location + ")");
+                    }
                 }
             }
         }
