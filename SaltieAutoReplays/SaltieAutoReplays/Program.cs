@@ -31,15 +31,16 @@ namespace SaltieAutoReplays
             processWatcher.EventArrived += new EventArrivedEventHandler(OnProcessCreate);
             processWatcher.Start();
 
-            Console.WriteLine("Watching for new replays in {0}\n", replaysPath);
-            Console.WriteLine("Press q to quit.");
+            Console.WriteLine("Watching for new replays in {0}", replaysPath);
+            Console.WriteLine("Watching for Rocket League startup in order to inject ReplaySaver.dll");
+            Console.WriteLine("\nPress q to quit.\n");
             while (Console.ReadKey().KeyChar != 'q') ;
         }
 
         // Method should contain whatever should happen on replay file creation. E.g. Upload file to server.
         private static void OnFileCreate(object source, FileSystemEventArgs e)
         {
-            Console.WriteLine("Created: {0}", e.FullPath);
+            Console.WriteLine("New replay found: {0}", e.FullPath);
             UploadFile(e.FullPath);
         }
 
@@ -55,6 +56,7 @@ namespace SaltieAutoReplays
                     try
                     {
                         Process.Start("RLBot Injector.exe");
+                        Console.WriteLine("ReplaySaver.dll was successfully injected");
                     }
                     catch (FileNotFoundException)
                     {
@@ -68,6 +70,7 @@ namespace SaltieAutoReplays
         private static void UploadFile(string filename)
         {
             var wc = new WebClient();
+            Console.WriteLine("Uploading replay file: {0}", filename);
             wc.UploadFileAsync(new Uri(UPLOAD_URL), filename);
         }
     }
