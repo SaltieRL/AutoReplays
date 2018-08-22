@@ -9,7 +9,7 @@ namespace SaltieAutoReplays
 {
     class Program
     {
-        static string UPLOAD_URL = "https://localhost:5000";
+        static string UPLOAD_URL = "http://saltie.tk/replays/parse";
 
         private static void Main()
         {
