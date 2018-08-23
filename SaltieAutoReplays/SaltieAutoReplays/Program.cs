@@ -41,6 +41,7 @@ namespace SaltieAutoReplays
         private static void OnFileCreate(object source, FileSystemEventArgs e)
         {
             Console.WriteLine("New replay found: {0}", e.FullPath);
+            System.Threading.Thread.Sleep(2000);
             UploadFile(e.FullPath);
         }
 
