@@ -34,17 +34,17 @@
 
             <StackPanel Grid.Column="0" Grid.Row="1">
                 <Label FontSize="30">Auto Uploading</Label>
-                <Label x:Name="UploadingStatus" FontSize="16">Status:</Label>
+                <Label x:Name="UploadingStatus" FontSize="16" Content="Status: Automatic uploading is disabled."/>
             </StackPanel>
 
             <CheckBox x:Name="AutoSave" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-            <CheckBox x:Name="AutoUpload" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+            <CheckBox x:Name="AutoUpload" Click="AutoUpload_Click" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
 
         </Grid>
 
         <StackPanel x:Name="WarningPanel" Orientation="Horizontal" Background="LightYellow" HorizontalAlignment="Center">
             <TextBlock x:Name="WarningText" FontSize="18" TextWrapping="WrapWithOverflow" Width="422" Margin="10,10,10,10">
-                Auto Saving has already been injected! Please restart Rocket League to disable it.
+                Auto Saving has already been injected! Please restart Rocket League to disable it. (default text, not done)
             </TextBlock>
         </StackPanel>
 

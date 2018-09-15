@@ -55,7 +55,6 @@ namespace ReplaysGUI
             UploadReplays();
         }
 
-
         public void UploadReplays()
         {
             if (AutoUpload.IsChecked ?? false)
@@ -82,6 +81,7 @@ namespace ReplaysGUI
                     try
                     {
                         Process injectorProcess = Process.Start("RLBot Injector.exe");
+                        SavingStatus.Content = "Status: Injecting.";
                         injectorProcess.EnableRaisingEvents = true;
                         injectorProcess.Exited += new EventHandler(InjectorProcessExited);
                     }
@@ -101,11 +101,16 @@ namespace ReplaysGUI
                 int exitCode = ((Process)sender).ExitCode;
 
                 if (exitCode == 0)
+                {
                     SavingStatus.Content = "Status: Injected successfully! Replays will be automatically saved.";
+                    AutoSave.IsChecked = true;
+                }
                 else
+                {
                     SavingStatus.Content = $"Status: Injection failed. Exit code: {exitCode}";
+                    AutoSave.IsChecked = false;
+                }
             });
-
         }
 
         private void UploadReplay(string filename)
@@ -113,6 +118,17 @@ namespace ReplaysGUI
             var wc = new WebClient();
             Console.WriteLine("Uploading replay file: {0}", filename);
             wc.UploadFileAsync(new Uri(UPLOAD_URL), filename);
+        }
+
+        private void AutoUpload_Click(object sender, RoutedEventArgs e)
+        {
+            if (AutoUpload.IsChecked ?? true)
+            {
+                UploadReplays();
+                UploadingStatus.Content = "Status: Automatic uploading is enabled.";
+            }
+            else
+                UploadingStatus.Content = "Status: Automatic uploading is disabled.";
         }
     }
 }
