@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Windows;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Management;
 using System.Net;
-using System.Diagnostics;
 using System.Reflection;
+using System.Windows;
 
 namespace ReplaysGUI
 {
@@ -13,7 +14,9 @@ namespace ReplaysGUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        static string UPLOAD_URL = "http://saltie.tk/replays/parse";
+        string UPLOAD_URL = "http://saltie.tk/replays/parse";
+
+        Queue<string> replaysToUpload = new Queue<string>();
 
         public MainWindow()
         {
@@ -43,17 +46,36 @@ namespace ReplaysGUI
             while (Console.ReadKey().KeyChar != 'q') ;
         }
 
-        // Method should contain whatever should happen on replay file creation. E.g. Upload file to server.
-        private static void OnFileCreate(object source, FileSystemEventArgs e)
+        // Method should contain whatever should happen on replay file creation.
+        private void OnFileCreate(object source, FileSystemEventArgs e)
         {
-            Console.WriteLine("New replay found: {0}", e.FullPath);
-            System.Threading.Thread.Sleep(2000);
-            UploadFile(e.FullPath);
+            if (e.FullPath.EndsWith(".replay"))
+            {
+                Console.WriteLine("New replay found: {0}", e.FullPath);
+                replaysToUpload.Enqueue(e.FullPath);
+                // We must sleep because it takes a while for Rocket League to completely save the file after creation.
+                System.Threading.Thread.Sleep(2000);
+                UploadReplays();
+            }
+        }
+
+        public void UploadReplays()
+        {
+            if (AutoUpload.IsChecked ?? false)
+                return;
+
+            for (int i = 0; i < replaysToUpload.Count; i++)
+            {
+                UploadReplay(replaysToUpload.Dequeue());
+            }
         }
 
         // Method should contain whatever should happen when Rocket League is started.
-        private static void OnProcessCreate(object source, EventArrivedEventArgs e)
+        private void OnProcessCreate(object source, EventArrivedEventArgs e)
         {
+            if (AutoSave.IsChecked ?? false)
+                return;
+            
             foreach (var item in ((ManagementBaseObject)e.NewEvent["TargetInstance"]).Properties)
             {
                 if (item.Name == "Caption" && item.Value.ToString().ToLower() == "rocketleague.exe")
@@ -70,11 +92,12 @@ namespace ReplaysGUI
                         throw new FileNotFoundException("Injector was not found in the same folder as this exe! (" +
                             Assembly.GetEntryAssembly().Location + ")");
                     }
+
                 }
             }
         }
 
-        private static void UploadFile(string filename)
+        private void UploadReplay(string filename)
         {
             var wc = new WebClient();
             Console.WriteLine("Uploading replay file: {0}", filename);
