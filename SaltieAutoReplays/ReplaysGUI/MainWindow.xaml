@@ -29,7 +29,7 @@
 
             <StackPanel Grid.Column="0" Grid.Row="0">
                 <Label FontSize="30">Auto Saving</Label>
-                <Label x:Name="SavingStatus" FontSize="16">Status:</Label>
+                <Label x:Name="SavingStatus" FontSize="16">Status: Uninjected.</Label>
             </StackPanel>
 
             <StackPanel Grid.Column="0" Grid.Row="1">
@@ -49,9 +49,9 @@
         </StackPanel>
 
         <StackPanel>
-            <CheckBox x:Name="StartOnStartup" FontSize="18">Start on Windows startup</CheckBox>
-            <CheckBox x:Name="UpdatesOnStart" FontSize="18">Check for updates on start</CheckBox>
-            <Button x:Name="CheckUpdates">Check for updates</Button>
+            <CheckBox x:Name="StartOnStartup" FontSize="18">Start on Windows startup (not done)</CheckBox>
+            <CheckBox x:Name="UpdatesOnStart" FontSize="18">Check for updates on start (not done)</CheckBox>
+            <Button x:Name="CheckUpdates">Check for updates (not done)</Button>
         </StackPanel>
 
         <DockPanel>
