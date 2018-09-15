@@ -43,7 +43,6 @@ namespace ReplaysGUI
             Console.WriteLine("Watching for new replays in {0}", replaysPath);
             Console.WriteLine("Watching for Rocket League startup in order to inject ReplaySaver.dll");
             Console.WriteLine("\nPress q to quit.\n");
-            while (Console.ReadKey().KeyChar != 'q') ;
         }
 
         // Method should contain whatever should happen on replay file creation.
