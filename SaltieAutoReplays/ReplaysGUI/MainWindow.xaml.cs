@@ -74,7 +74,7 @@ namespace ReplaysGUI
         {
             if (AutoSave.IsChecked ?? false)
                 return;
-            
+
             foreach (var item in ((ManagementBaseObject)e.NewEvent["TargetInstance"]).Properties)
             {
                 if (item.Name == "Caption" && item.Value.ToString().ToLower() == "rocketleague.exe")
@@ -83,17 +83,31 @@ namespace ReplaysGUI
 
                     try
                     {
-                        Process.Start("RLBot Injector.exe");
-                        Console.WriteLine("ReplaySaver.dll was successfully injected");
+                        Process injectorProcess = Process.Start("RLBot Injector.exe");
+                        injectorProcess.EnableRaisingEvents = true;
+                        injectorProcess.Exited += new EventHandler(InjectorProcessExited);
                     }
                     catch (FileNotFoundException)
                     {
                         throw new FileNotFoundException("Injector was not found in the same folder as this exe! (" +
                             Assembly.GetEntryAssembly().Location + ")");
                     }
-
                 }
             }
+        }
+
+        private void InjectorProcessExited(object sender, EventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                int exitCode = ((Process)sender).ExitCode;
+
+                if (exitCode == 0)
+                    SavingStatus.Content = "Status: Injected successfully! Replays will be automatically saved.";
+                else
+                    SavingStatus.Content = $"Status: Injection failed. Exit code: {exitCode}";
+            });
+
         }
 
         private void UploadReplay(string filename)
