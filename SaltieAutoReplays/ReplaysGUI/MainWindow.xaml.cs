@@ -14,7 +14,7 @@ namespace ReplaysGUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        string UPLOAD_URL = "http://saltie.tk/replays/parse";
+        const string UPLOAD_URL = "http://saltie.tk/replays/parse";
 
         Queue<string> replaysToUpload = new Queue<string>();
 
@@ -48,15 +48,13 @@ namespace ReplaysGUI
         // Method should contain whatever should happen on replay file creation.
         private void OnFileCreate(object source, FileSystemEventArgs e)
         {
-            if (e.FullPath.EndsWith(".replay"))
-            {
-                Console.WriteLine("New replay found: {0}", e.FullPath);
-                replaysToUpload.Enqueue(e.FullPath);
-                // We must sleep because it takes a while for Rocket League to completely save the file after creation.
-                System.Threading.Thread.Sleep(2000);
-                UploadReplays();
-            }
+            Console.WriteLine("New replay found: {0}", e.FullPath);
+            replaysToUpload.Enqueue(e.FullPath);
+            // We must sleep because it takes a while for Rocket League to completely save the file after creation.
+            System.Threading.Thread.Sleep(2000);
+            UploadReplays();
         }
+
 
         public void UploadReplays()
         {
