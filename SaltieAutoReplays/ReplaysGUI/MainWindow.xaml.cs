@@ -40,17 +40,12 @@ namespace ReplaysGUI
             processWatcher.Options.Timeout = new TimeSpan(0, 1, 0);
             processWatcher.EventArrived += new EventArrivedEventHandler(OnProcessCreate);
             processWatcher.Start();
-
-            Console.WriteLine("Watching for new replays in {0}", replaysPath);
-            Console.WriteLine("Watching for Rocket League startup in order to inject ReplaySaver.dll");
-            Console.WriteLine("\nPress q to quit.\n");
         }
 
 
         // Method should contain whatever should happen on replay file creation.
         private void OnFileCreate(object source, FileSystemEventArgs e)
         {
-            Console.WriteLine("New replay found: {0}", e.FullPath);
             replaysToUpload.Enqueue(e.FullPath);
             // We must sleep because it takes a while for Rocket League to completely save the file after creation.
             System.Threading.Thread.Sleep(2000);
@@ -82,8 +77,6 @@ namespace ReplaysGUI
                 {
                     if (item.Name == "Caption" && item.Value.ToString().ToLower() == "rocketleague.exe")
                     {
-                        Console.WriteLine("rocketleague.exe was started");
-
                         try
                         {
                             Process injectorProcess = Process.Start("RLBot Injector.exe");
@@ -125,7 +118,6 @@ namespace ReplaysGUI
         private void UploadReplay(string filename)
         {
             var wc = new WebClient();
-            Console.WriteLine("Uploading replay file: {0}", filename);
             wc.UploadFileAsync(new Uri(UPLOAD_URL), filename);
         }
 
@@ -185,6 +177,46 @@ namespace ReplaysGUI
         private void StartOnStartup_Unchecked(object sender, RoutedEventArgs e)
         {
             RemoveShortcutFromStartup();
+        }
+
+
+        private bool IsModuleLoaded(string moduleName, string processName)
+        {
+            Process[] processes = Process.GetProcessesByName("RocketLeague");
+
+            if (processes.Length == 1)
+            {
+                foreach (ProcessModule module in processes[0].Modules)
+                {
+                    if (module.ModuleName == "ReplaySaver.dll")
+                        return true;
+                }
+            }
+            return false;
+        }
+
+
+        private void AutoSave_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (IsModuleLoaded("ReplaySaver.dll", "RocketLeague.exe"))
+                {
+                    WarningText.Text = "Auto Saving has already been injected! Please restart Rocket League to disable it.";
+                }
+            });
+        }
+
+
+        private void AutoSave_Checked(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (!IsModuleLoaded("ReplaySaver.dll", "RocketLeague.exe"))
+                {
+                    SavingStatus.Content = "Status: Waiting for Rocket League to launch.";
+                }
+            });
         }
     }
 }
