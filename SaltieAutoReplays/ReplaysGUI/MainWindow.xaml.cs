@@ -147,7 +147,7 @@ namespace ReplaysGUI
 
         private void AddShortcutToStartup()
         {
-            string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
             string shortcutPath = Path.Combine(startupFolder, "AutoReplays.lnk");
 
             WshShell shell = new WshShell();
@@ -159,7 +159,7 @@ namespace ReplaysGUI
 
         private void RemoveShortcutFromStartup()
         {
-            string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
             string shortcutPath = Path.Combine(startupFolder, "AutoReplays.lnk");
 
             if (System.IO.File.Exists(shortcutPath))
@@ -178,13 +178,13 @@ namespace ReplaysGUI
 
         private void StartOnStartup_Checked(object sender, RoutedEventArgs e)
         {
-            Dispatcher.Invoke(() =>
-            {
-                if (StartOnStartup.IsChecked ?? true)
-                    AddShortcutToStartup();
-                else
-                    RemoveShortcutFromStartup();
-            });
+            AddShortcutToStartup();
+        }
+
+
+        private void StartOnStartup_Unchecked(object sender, RoutedEventArgs e)
+        {
+            RemoveShortcutFromStartup();
         }
     }
 }
