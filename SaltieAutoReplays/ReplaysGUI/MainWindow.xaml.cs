@@ -15,9 +15,9 @@ namespace ReplaysGUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        const string UPLOAD_URL = "http://saltie.tk/replays/parse";
-
+        const string UPLOAD_URL = "https://calculated.gg/api/upload";
         Queue<string> replaysToUpload = new Queue<string>();
+
 
         public MainWindow()
         {
@@ -46,6 +46,7 @@ namespace ReplaysGUI
             Console.WriteLine("\nPress q to quit.\n");
         }
 
+
         // Method should contain whatever should happen on replay file creation.
         private void OnFileCreate(object source, FileSystemEventArgs e)
         {
@@ -55,6 +56,7 @@ namespace ReplaysGUI
             System.Threading.Thread.Sleep(2000);
             UploadReplays();
         }
+
 
         public void UploadReplays()
         {
@@ -66,6 +68,7 @@ namespace ReplaysGUI
                 UploadReplay(replaysToUpload.Dequeue());
             }
         }
+
 
         // Method should contain whatever should happen when Rocket League is started.
         private void OnProcessCreate(object source, EventArrivedEventArgs e)
@@ -88,12 +91,13 @@ namespace ReplaysGUI
                     }
                     catch (FileNotFoundException)
                     {
-                        throw new FileNotFoundException("Injector was not found in the same folder as this exe! (" +
-                            Assembly.GetEntryAssembly().Location + ")");
+                        WarningText.Text = "Injector was not found in the same folder as this exe!" + 
+                            $"({Assembly.GetEntryAssembly().Location})";
                     }
                 }
             }
         }
+
 
         private void InjectorProcessExited(object sender, EventArgs e)
         {
@@ -114,12 +118,14 @@ namespace ReplaysGUI
             });
         }
 
+
         private void UploadReplay(string filename)
         {
             var wc = new WebClient();
             Console.WriteLine("Uploading replay file: {0}", filename);
             wc.UploadFileAsync(new Uri(UPLOAD_URL), filename);
         }
+
 
         private void AutoUpload_Click(object sender, RoutedEventArgs e)
         {
@@ -132,6 +138,7 @@ namespace ReplaysGUI
                 UploadingStatus.Content = "Status: Automatic uploading is disabled.";
         }
 
+
         private void AddShortcutToStartup()
         {
             string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -142,6 +149,7 @@ namespace ReplaysGUI
             shortcut.TargetPath = Assembly.GetEntryAssembly().Location;
             shortcut.Save();
         }
+
 
         private void RemoveShortcutFromStartup()
         {
@@ -160,6 +168,7 @@ namespace ReplaysGUI
                 }
             }
         }
+
 
         private void StartOnStartup_Checked(object sender, RoutedEventArgs e)
         {
