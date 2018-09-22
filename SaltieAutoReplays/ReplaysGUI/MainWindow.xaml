@@ -49,7 +49,7 @@
         </StackPanel>
 
         <StackPanel>
-            <CheckBox x:Name="StartOnStartup" FontSize="18">Start on Windows startup (not done)</CheckBox>
+            <CheckBox x:Name="StartOnStartup" FontSize="18" Checked="StartOnStartup_Checked">Start on Windows startup (not done)</CheckBox>
             <CheckBox x:Name="UpdatesOnStart" FontSize="18">Check for updates on start (not done)</CheckBox>
             <Button x:Name="CheckUpdates">Check for updates (not done)</Button>
         </StackPanel>

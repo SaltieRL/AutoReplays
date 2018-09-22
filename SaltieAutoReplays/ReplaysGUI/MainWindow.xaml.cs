@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IWshRuntimeLibrary;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -129,6 +130,43 @@ namespace ReplaysGUI
             }
             else
                 UploadingStatus.Content = "Status: Automatic uploading is disabled.";
+        }
+
+        private void AddShortcutToStartup()
+        {
+            string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string shortcutPath = Path.Combine(startupFolder, "AutoReplays.lnk");
+
+            WshShell shell = new WshShell();
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+            shortcut.TargetPath = Assembly.GetEntryAssembly().Location;
+            shortcut.Save();
+        }
+
+        private void RemoveShortcutFromStartup()
+        {
+            string startupFolder = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string shortcutPath = Path.Combine(startupFolder, "AutoReplays.lnk");
+
+            if (System.IO.File.Exists(shortcutPath))
+            {
+                try
+                {
+                    System.IO.File.Delete(shortcutPath);
+                }
+                catch (IOException)
+                {
+                    WarningText.Text = "AutoReplays could not be removed from Windows startup.";
+                }
+            }
+        }
+
+        private void StartOnStartup_Checked(object sender, RoutedEventArgs e)
+        {
+            if (StartOnStartup.IsChecked ?? true)
+                AddShortcutToStartup();
+            else
+                RemoveShortcutFromStartup();
         }
     }
 }
