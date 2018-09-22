@@ -73,29 +73,32 @@ namespace ReplaysGUI
         // Method should contain whatever should happen when Rocket League is started.
         private void OnProcessCreate(object source, EventArrivedEventArgs e)
         {
-            if (AutoSave.IsChecked ?? false)
-                return;
-
-            foreach (var item in ((ManagementBaseObject)e.NewEvent["TargetInstance"]).Properties)
+            Dispatcher.Invoke(() =>
             {
-                if (item.Name == "Caption" && item.Value.ToString().ToLower() == "rocketleague.exe")
-                {
-                    Console.WriteLine("rocketleague.exe was started");
+                if (AutoSave.IsChecked ?? false)
+                    return;
 
-                    try
+                foreach (var item in ((ManagementBaseObject)e.NewEvent["TargetInstance"]).Properties)
+                {
+                    if (item.Name == "Caption" && item.Value.ToString().ToLower() == "rocketleague.exe")
                     {
-                        Process injectorProcess = Process.Start("RLBot Injector.exe");
-                        SavingStatus.Content = "Status: Injecting.";
-                        injectorProcess.EnableRaisingEvents = true;
-                        injectorProcess.Exited += new EventHandler(InjectorProcessExited);
-                    }
-                    catch (FileNotFoundException)
-                    {
-                        WarningText.Text = "Injector was not found in the same folder as this exe!" + 
-                            $"({Assembly.GetEntryAssembly().Location})";
+                        Console.WriteLine("rocketleague.exe was started");
+
+                        try
+                        {
+                            Process injectorProcess = Process.Start("RLBot Injector.exe");
+                            SavingStatus.Content = "Status: Injecting.";
+                            injectorProcess.EnableRaisingEvents = true;
+                            injectorProcess.Exited += new EventHandler(InjectorProcessExited);
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            WarningText.Text = "Injector was not found in the same folder as this exe!" +
+                                $"({Assembly.GetEntryAssembly().Location})";
+                        }
                     }
                 }
-            }
+            });
         }
 
 
@@ -129,13 +132,16 @@ namespace ReplaysGUI
 
         private void AutoUpload_Click(object sender, RoutedEventArgs e)
         {
-            if (AutoUpload.IsChecked ?? true)
+            Dispatcher.Invoke(() =>
             {
-                UploadReplays();
-                UploadingStatus.Content = "Status: Automatic uploading is enabled.";
-            }
-            else
-                UploadingStatus.Content = "Status: Automatic uploading is disabled.";
+                if (AutoUpload.IsChecked ?? true)
+                {
+                    UploadReplays();
+                    UploadingStatus.Content = "Status: Automatic uploading is enabled.";
+                }
+                else
+                    UploadingStatus.Content = "Status: Automatic uploading is disabled.";
+            });
         }
 
 
@@ -172,10 +178,13 @@ namespace ReplaysGUI
 
         private void StartOnStartup_Checked(object sender, RoutedEventArgs e)
         {
-            if (StartOnStartup.IsChecked ?? true)
-                AddShortcutToStartup();
-            else
-                RemoveShortcutFromStartup();
+            Dispatcher.Invoke(() =>
+            {
+                if (StartOnStartup.IsChecked ?? true)
+                    AddShortcutToStartup();
+                else
+                    RemoveShortcutFromStartup();
+            });
         }
     }
 }

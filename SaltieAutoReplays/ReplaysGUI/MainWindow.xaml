@@ -44,12 +44,12 @@
 
         <StackPanel x:Name="WarningPanel" Orientation="Horizontal" Background="LightYellow" HorizontalAlignment="Center">
             <TextBlock x:Name="WarningText" FontSize="18" TextWrapping="WrapWithOverflow" Width="422" Margin="10,10,10,10">
-                Auto Saving has already been injected! Please restart Rocket League to disable it. (default text, not done)
+                Everything is functional.
             </TextBlock>
         </StackPanel>
 
         <StackPanel>
-            <CheckBox x:Name="StartOnStartup" FontSize="18" Checked="StartOnStartup_Checked">Start on Windows startup (not done)</CheckBox>
+            <CheckBox x:Name="StartOnStartup" FontSize="18" Checked="StartOnStartup_Checked">Start on Windows startup</CheckBox>
             <CheckBox x:Name="UpdatesOnStart" FontSize="18">Check for updates on start (not done)</CheckBox>
             <Button x:Name="CheckUpdates">Check for updates (not done)</Button>
         </StackPanel>
