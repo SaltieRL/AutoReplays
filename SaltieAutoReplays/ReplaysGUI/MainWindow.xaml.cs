@@ -65,6 +65,14 @@ namespace ReplaysGUI
         }
 
 
+        private void StartInjection()
+        {
+            Process injectorProcess = Process.Start("RLBot Injector.exe");
+            SavingStatus.Content = "Status: Injecting.";
+            injectorProcess.EnableRaisingEvents = true;
+            injectorProcess.Exited += new EventHandler(InjectorProcessExited);
+        }
+
         // Method should contain whatever should happen when Rocket League is started.
         private void OnProcessCreate(object source, EventArrivedEventArgs e)
         {
@@ -79,10 +87,7 @@ namespace ReplaysGUI
                     {
                         try
                         {
-                            Process injectorProcess = Process.Start("RLBot Injector.exe");
-                            SavingStatus.Content = "Status: Injecting.";
-                            injectorProcess.EnableRaisingEvents = true;
-                            injectorProcess.Exited += new EventHandler(InjectorProcessExited);
+                            StartInjection();
                         }
                         catch (FileNotFoundException)
                         {
@@ -213,9 +218,10 @@ namespace ReplaysGUI
             Dispatcher.Invoke(() =>
             {
                 if (!IsModuleLoaded("ReplaySaver.dll", "RocketLeague.exe"))
-                {
                     SavingStatus.Content = "Status: Waiting for Rocket League to launch.";
-                }
+
+                if (Process.GetProcessesByName("RocketLeague").Length == 1)
+                    StartInjection();
             });
         }
     }
