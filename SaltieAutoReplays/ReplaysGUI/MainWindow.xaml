@@ -3,18 +3,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:local="clr-namespace:ReplaysGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="374.444" Width="448.889">
+        Title="AutoReplays" Height="374.444" Width="448.889">
 
-    <!--
-    Light theme
-    https://cdn.discordapp.com/attachments/471773324549292043/483525618563153930/unknown.png
-    Dark theme
-    https://cdn.discordapp.com/attachments/471773324549292043/483530211531685923/unknown.png
-    -->
-    
     <StackPanel Margin="10,10,10,0">
+
+        <tb:TaskbarIcon
+
+          IconSource="/icon.ico"
+          ToolTipText="AutoReplays">
+            
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Open AutoReplays window" />
+                    <MenuItem Header="Exit" />
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+            
+        </tb:TaskbarIcon>
 
         <Grid>
             <!-- 2x2 grid -->
@@ -60,5 +68,5 @@
         </DockPanel>
 
     </StackPanel>
-    
+
 </Window>
