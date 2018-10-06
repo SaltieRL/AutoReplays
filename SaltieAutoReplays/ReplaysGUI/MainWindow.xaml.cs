@@ -206,9 +206,9 @@ namespace ReplaysGUI
             Dispatcher.Invoke(() =>
             {
                 if (IsModuleLoaded("ReplaySaver.dll", "RocketLeague.exe"))
-                {
                     WarningText.Text = "Auto Saving has already been injected! Please restart Rocket League to disable it.";
-                }
+                else
+                    SavingStatus.Content = "Status: Uninjected.";
             });
         }
 
