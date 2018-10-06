@@ -50,8 +50,8 @@
 
         <StackPanel>
             <CheckBox x:Name="StartOnStartup" FontSize="18" Checked="StartOnStartup_Checked" Unchecked="StartOnStartup_Unchecked">Start on Windows startup</CheckBox>
-            <CheckBox x:Name="UpdatesOnStart" FontSize="18">Check for updates on start (not done)</CheckBox>
-            <Button x:Name="CheckUpdates">Check for updates (not done)</Button>
+            <CheckBox x:Name="UpdatesOnStart" FontSize="18" Checked="UpdatesOnStart_Checked" Unchecked="UpdatesOnStart_Unchecked">Check for updates on start</CheckBox>
+            <Button x:Name="CheckUpdates" Click="CheckUpdates_Click">Check for updates</Button>
         </StackPanel>
 
         <DockPanel>

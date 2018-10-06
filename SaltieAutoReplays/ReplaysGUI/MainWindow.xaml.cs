@@ -7,6 +7,7 @@ using System.Management;
 using System.Net;
 using System.Reflection;
 using System.Windows;
+using AutoUpdaterDotNET;
 
 namespace ReplaysGUI
 {
@@ -22,6 +23,9 @@ namespace ReplaysGUI
         public MainWindow()
         {
             InitializeComponent();
+            
+            if (Properties.Settings.Default.UpdateOnStart)
+                AutoUpdater.Start("https://github.com/SaltieRL/AutoReplays/blob/master/Updater.xml");
 
             // TODO: Read the replays path from a config file instead. Could be set during installation.
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -223,6 +227,21 @@ namespace ReplaysGUI
                 if (Process.GetProcessesByName("RocketLeague").Length == 1)
                     StartInjection();
             });
+        }
+
+        private void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            AutoUpdater.Start("https://github.com/SaltieRL/AutoReplays/blob/master/Updater.xml");
+        }
+
+        private void UpdatesOnStart_Checked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.UpdateOnStart = true;
+        }
+
+        private void UpdatesOnStart_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.UpdateOnStart = false;
         }
     }
 }
