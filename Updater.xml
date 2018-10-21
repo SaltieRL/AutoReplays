@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <item>
     <version>1.0.0.0</version>
-    <url>none</url>
+    <url>https://github.com/SaltieRL/AutoReplays/releases/download/v1.0.0-alpha/AutoReplays.1.0.0-alpha.zip</url>
     <changelog>https://github.com/SaltieRL/AutoReplays/releases</changelog>
-    <mandatory>false</mandatory>
+    <mandatory>true</mandatory>
 </item>
