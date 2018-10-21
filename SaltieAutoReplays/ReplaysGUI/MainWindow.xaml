@@ -31,7 +31,7 @@
             </StackPanel>
 
             <CheckBox x:Name="AutoSave" Checked="AutoSave_Checked" Unchecked="AutoSave_Unchecked" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-            <CheckBox x:Name="AutoUpload" Click="AutoUpload_Click" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+            <CheckBox x:Name="AutoUpload" Checked="AutoUpload_Checked" Unchecked="AutoUpload_Unchecked" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
 
         </Grid>
 

@@ -24,9 +24,6 @@ namespace ReplaysGUI
         {
             InitializeComponent();
 
-            if (Properties.Settings.Default.UpdateOnStart)
-                AutoUpdater.Start("https://github.com/SaltieRL/AutoReplays/blob/master/Updater.xml");
-
             // TODO: Read the replays path from a config file instead. Could be set during installation.
             string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             string replaysPath = Path.Combine(documentsPath, @"My Games\Rocket League\TAGame\Demos");
@@ -46,6 +43,15 @@ namespace ReplaysGUI
             processWatcher.Options.Timeout = new TimeSpan(0, 1, 0);
             processWatcher.EventArrived += new EventArrivedEventHandler(OnProcessCreate);
             processWatcher.Start();
+
+            // Handle user settings
+            if (Properties.Settings.Default.UpdateOnStart)
+                AutoUpdater.Start("https://github.com/SaltieRL/AutoReplays/blob/master/Updater.xml");
+
+            UpdatesOnStart.IsChecked = Properties.Settings.Default.UpdateOnStart;
+            StartOnStartup.IsChecked = Properties.Settings.Default.LaunchOnStart;
+            AutoSave.IsChecked = Properties.Settings.Default.AutoSave;
+            AutoUpload.IsChecked = Properties.Settings.Default.AutoUpload;
         }
 
 
@@ -76,7 +82,7 @@ namespace ReplaysGUI
 
         private void StartInjection()
         {
-            Process injectorProcess = Process.Start("RLBot Injector.exe");
+            Process injectorProcess = Process.Start("AutoReplays Injector.exe");
             injectorProcess.EnableRaisingEvents = true;
             injectorProcess.Exited += new EventHandler(InjectorProcessExited);
             Dispatcher.Invoke(() =>
@@ -84,6 +90,7 @@ namespace ReplaysGUI
                 SavingStatus.Content = "Status: Injecting.";
             });
         }
+
 
         // Method should contain whatever should happen when Rocket League is started.
         private void OnProcessCreate(object source, EventArrivedEventArgs e)
@@ -118,7 +125,7 @@ namespace ReplaysGUI
             {
                 int exitCode = ((Process)sender).ExitCode;
 
-                if (exitCode == 0)
+                if (exitCode == 0 || exitCode == 3)
                 {
                     SavingStatus.Content = "Status: Injected successfully! Replays will be automatically saved.";
                     AutoSave.IsChecked = true;
@@ -136,21 +143,6 @@ namespace ReplaysGUI
         {
             var wc = new WebClient();
             wc.UploadFileAsync(new Uri(UPLOAD_URL), filename);
-        }
-
-
-        private void AutoUpload_Click(object sender, RoutedEventArgs e)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                if (AutoUpload.IsChecked ?? true)
-                {
-                    UploadReplays();
-                    UploadingStatus.Content = "Status: Automatic uploading is enabled.";
-                }
-                else
-                    UploadingStatus.Content = "Status: Automatic uploading is disabled.";
-            });
         }
 
 
@@ -191,12 +183,16 @@ namespace ReplaysGUI
         private void StartOnStartup_Checked(object sender, RoutedEventArgs e)
         {
             AddShortcutToStartup();
+            Properties.Settings.Default.LaunchOnStart = true;
+            Properties.Settings.Default.Save();
         }
 
 
         private void StartOnStartup_Unchecked(object sender, RoutedEventArgs e)
         {
             RemoveShortcutFromStartup();
+            Properties.Settings.Default.LaunchOnStart = false;
+            Properties.Settings.Default.Save();
         }
 
 
@@ -218,6 +214,9 @@ namespace ReplaysGUI
 
         private void AutoSave_Unchecked(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.AutoSave = false;
+            Properties.Settings.Default.Save();
+
             Dispatcher.Invoke(() =>
             {
                 if (IsModuleLoaded("ReplaySaver.dll", "RocketLeague.exe"))
@@ -230,6 +229,9 @@ namespace ReplaysGUI
 
         private void AutoSave_Checked(object sender, RoutedEventArgs e)
         {
+            Properties.Settings.Default.AutoSave = true;
+            Properties.Settings.Default.Save();
+
             Dispatcher.Invoke(() =>
             {
                 if (!IsModuleLoaded("ReplaySaver.dll", "RocketLeague.exe"))
@@ -240,19 +242,50 @@ namespace ReplaysGUI
             });
         }
 
+
         private void CheckUpdates_Click(object sender, RoutedEventArgs e)
         {
             AutoUpdater.Start("https://github.com/SaltieRL/AutoReplays/blob/master/Updater.xml");
         }
 
+
         private void UpdatesOnStart_Checked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.UpdateOnStart = true;
+            Properties.Settings.Default.Save();
         }
+
 
         private void UpdatesOnStart_Unchecked(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.UpdateOnStart = false;
+            Properties.Settings.Default.Save();
+        }
+
+
+        private void AutoUpload_Checked(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                UploadReplays();
+                UploadingStatus.Content = "Status: Automatic uploading is enabled.";
+            });
+
+            Properties.Settings.Default.AutoUpload = true;
+            Properties.Settings.Default.Save();
+        }
+
+
+        private void AutoUpload_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                UploadReplays();
+                UploadingStatus.Content = "Status: Automatic uploading is disabled.";
+            });
+
+            Properties.Settings.Default.AutoUpload = false;
+            Properties.Settings.Default.Save();
         }
     }
 }

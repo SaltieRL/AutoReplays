@@ -34,5 +34,41 @@ namespace ReplaysGUI.Properties {
                 this["UpdateOnStart"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LaunchOnStart {
+            get {
+                return ((bool)(this["LaunchOnStart"]));
+            }
+            set {
+                this["LaunchOnStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoUpload {
+            get {
+                return ((bool)(this["AutoUpload"]));
+            }
+            set {
+                this["AutoUpload"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoSave {
+            get {
+                return ((bool)(this["AutoSave"]));
+            }
+            set {
+                this["AutoSave"] = value;
+            }
+        }
     }
 }
