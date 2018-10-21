@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReplaysGUI"
         mc:Ignorable="d"
-        Title="AutoReplays" Height="374.444" Width="448.889">
+        Title="AutoReplays" Height="375" Width="570" ResizeMode="NoResize">
 
     <StackPanel Margin="10,10,10,0">
 
         <Grid>
             <!-- 2x2 grid -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" MinWidth="400"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -30,13 +30,13 @@
                 <Label x:Name="UploadingStatus" FontSize="16" Content="Status: Automatic uploading is disabled."/>
             </StackPanel>
 
-            <CheckBox x:Name="AutoSave" Checked="AutoSave_Checked" Unchecked="AutoSave_Unchecked" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
-            <CheckBox x:Name="AutoUpload" Checked="AutoUpload_Checked" Unchecked="AutoUpload_Unchecked" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"></CheckBox>
+            <CheckBox x:Name="AutoSave" Checked="AutoSave_Checked" Unchecked="AutoSave_Unchecked" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="15" Margin="7,33,34,33" Width="16"></CheckBox>
+            <CheckBox x:Name="AutoUpload" Checked="AutoUpload_Checked" Unchecked="AutoUpload_Unchecked" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="15" Margin="7,33,34,33" Width="16"></CheckBox>
 
         </Grid>
 
-        <StackPanel x:Name="WarningPanel" Orientation="Horizontal" Background="LightYellow" HorizontalAlignment="Center">
-            <TextBlock x:Name="WarningText" FontSize="18" TextWrapping="WrapWithOverflow" Width="422" Margin="10,10,10,10">
+        <StackPanel x:Name="WarningPanel" Orientation="Horizontal" Background="LightYellow" HorizontalAlignment="Center" Height="70" Margin="2,0">
+            <TextBlock x:Name="WarningText" TextWrapping="Wrap" FontSize="18" Width="520" Margin="10,10,10,10" VerticalAlignment="Center">
                 Everything is functional.
             </TextBlock>
         </StackPanel>
