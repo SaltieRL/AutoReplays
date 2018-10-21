@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace ReplaysGUI
 {
@@ -13,5 +8,18 @@ namespace ReplaysGUI
     /// </summary>
     public partial class App : Application
     {
+        TaskbarIcon icon;
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            icon = (TaskbarIcon)FindResource("TaskIcon");
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            icon.Dispose();
+            base.OnExit(e);
+        }
     }
 }
