@@ -1,4 +1,5 @@
-﻿using IWshRuntimeLibrary;
+﻿using AutoUpdaterDotNET;
+using IWshRuntimeLibrary;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +8,6 @@ using System.Management;
 using System.Net;
 using System.Reflection;
 using System.Windows;
-using AutoUpdaterDotNET;
 
 namespace ReplaysGUI
 {
@@ -23,7 +23,7 @@ namespace ReplaysGUI
         public MainWindow()
         {
             InitializeComponent();
-            
+
             if (Properties.Settings.Default.UpdateOnStart)
                 AutoUpdater.Start("https://github.com/SaltieRL/AutoReplays/blob/master/Updater.xml");
 
@@ -32,11 +32,13 @@ namespace ReplaysGUI
             string replaysPath = Path.Combine(documentsPath, @"My Games\Rocket League\TAGame\Demos");
 
             // Create replay folder monitor.
-            FileSystemWatcher watcher = new FileSystemWatcher();
-            watcher.Path = replaysPath;
-            watcher.Filter = "*.replay";
+            FileSystemWatcher watcher = new FileSystemWatcher
+            {
+                Path = replaysPath,
+                Filter = "*.replay",
+                EnableRaisingEvents = true
+            };
             watcher.Created += new FileSystemEventHandler(OnFileCreate);
-            watcher.EnableRaisingEvents = true;
 
             // Create process monitor to watch for rocketleague.exe
             WqlEventQuery processQuery = new WqlEventQuery("__InstanceCreationEvent", new TimeSpan(0, 0, 2), "targetinstance isa 'Win32_Process'");
@@ -59,22 +61,28 @@ namespace ReplaysGUI
 
         public void UploadReplays()
         {
-            if (AutoUpload.IsChecked ?? false)
-                return;
-
-            for (int i = 0; i < replaysToUpload.Count; i++)
+            Dispatcher.Invoke(() =>
             {
-                UploadReplay(replaysToUpload.Dequeue());
-            }
+                if (!AutoUpload.IsChecked.Value)
+                    return;
+
+                for (int i = 0; i < replaysToUpload.Count; i++)
+                {
+                    UploadReplay(replaysToUpload.Dequeue());
+                }
+            });
         }
 
 
         private void StartInjection()
         {
             Process injectorProcess = Process.Start("RLBot Injector.exe");
-            SavingStatus.Content = "Status: Injecting.";
             injectorProcess.EnableRaisingEvents = true;
             injectorProcess.Exited += new EventHandler(InjectorProcessExited);
+            Dispatcher.Invoke(() =>
+            {
+                SavingStatus.Content = "Status: Injecting.";
+            });
         }
 
         // Method should contain whatever should happen when Rocket League is started.
@@ -82,7 +90,7 @@ namespace ReplaysGUI
         {
             Dispatcher.Invoke(() =>
             {
-                if (AutoSave.IsChecked ?? false)
+                if (!AutoSave.IsChecked.Value)
                     return;
 
                 foreach (var item in ((ManagementBaseObject)e.NewEvent["TargetInstance"]).Properties)
@@ -171,7 +179,10 @@ namespace ReplaysGUI
                 }
                 catch (IOException)
                 {
-                    WarningText.Text = "AutoReplays could not be removed from Windows startup.";
+                    Dispatcher.Invoke(() =>
+                    {
+                        WarningText.Text = "AutoReplays could not be removed from Windows startup.";
+                    });
                 }
             }
         }
