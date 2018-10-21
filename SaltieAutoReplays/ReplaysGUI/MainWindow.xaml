@@ -49,7 +49,7 @@
 
         <DockPanel>
             <Label FontSize="12">©2018 calculated.gg</Label>
-            <Label FontSize="12" HorizontalAlignment="Right">0.9.0</Label>
+            <Label FontSize="12" HorizontalAlignment="Right">1.0.0-alpha</Label>
         </DockPanel>
 
     </StackPanel>
